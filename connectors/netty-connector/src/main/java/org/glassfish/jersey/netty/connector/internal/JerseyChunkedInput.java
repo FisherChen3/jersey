@@ -192,22 +192,19 @@ public class JerseyChunkedInput extends OutputStream implements ChunkedInput<Byt
 
     @Override
     public void write(final byte[] b) throws IOException {
-
-        write(new Provider<ByteBuffer>() {
-            @Override
-            public ByteBuffer get() {
-                return ByteBuffer.wrap(b);
-            }
-        });
+        write(b, 0, b.length);
     }
 
     @Override
     public void write(final byte[] b, final int off, final int len) throws IOException {
 
+        final byte[] bytes = new byte[len];
+        System.arraycopy(b, off, bytes, 0, len);
+
         write(new Provider<ByteBuffer>() {
             @Override
             public ByteBuffer get() {
-                return ByteBuffer.wrap(b, off, len);
+                return ByteBuffer.wrap(bytes);
             }
         });
     }
